@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import com.banquito.corecobros.invoice.model.Tax;
 
-@Repository
 public interface TaxRepository extends MongoRepository<Tax, String>{
 
     List<Tax> findByInvoiceId(String invoiceId);
