@@ -56,15 +56,4 @@ public class InvoiceController {
         return ResponseEntity.ok(invoices);
     }
 
-    @GetMapping("/company/{companyName}")
-    public ResponseEntity<List<InvoiceDTO>> getInvoicesByCompanyName(@PathVariable String companyName) {
-        List<InvoiceDTO> invoices = invoiceService.getInvoicesByCompanyName(companyName);
-        return ResponseEntity.ok(invoices);
-    }
-
-    @GetMapping("/ruc/{ruc}")
-    public ResponseEntity<List<InvoiceDTO>> getInvoicesByRuc(@PathVariable String ruc) {
-        List<InvoiceDTO> invoices = invoiceService.getInvoicesByRuc(ruc);
-        return ResponseEntity.ok(invoices);
-    }
 }

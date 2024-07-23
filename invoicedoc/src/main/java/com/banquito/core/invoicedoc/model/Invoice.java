@@ -21,6 +21,7 @@ public class Invoice {
 
     @Id
     private String id;
+    private String uniqueId;
     private String ruc;
     private String companyName;
     private String address;

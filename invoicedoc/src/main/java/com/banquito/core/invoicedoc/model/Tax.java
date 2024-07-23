@@ -20,6 +20,7 @@ public class Tax {
     @Id
     private String id;
     private String invoiceId;
+    private String uniqueId;
     private String name;
     private BigDecimal value;
     private BigDecimal percentage;

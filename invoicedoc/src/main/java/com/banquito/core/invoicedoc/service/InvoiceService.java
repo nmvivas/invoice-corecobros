@@ -1,6 +1,7 @@
 package com.banquito.core.invoicedoc.service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -22,44 +23,29 @@ public class InvoiceService {
 
     public InvoiceDTO createInvoice(InvoiceDTO invoiceDTO) {
         Invoice invoice = invoiceMapper.toPersistence(invoiceDTO);
+        invoice.setUniqueId(UUID.randomUUID().toString());
         invoice = invoiceRepository.save(invoice);
         return invoiceMapper.toDTO(invoice);
     }
 
+    public List<InvoiceDTO> getAllInvoices() {
+        List<Invoice> invoices = invoiceRepository.findAll();
+        return invoices.stream().map(invoiceMapper::toDTO).collect(Collectors.toList());
+    }
+
+    public InvoiceDTO getInvoiceById(String id) {
+        Invoice invoice = invoiceRepository.findById(id).orElse(null);
+        return invoiceMapper.toDTO(invoice);
+    }
+
     public InvoiceDTO updateInvoice(String id, InvoiceDTO invoiceDTO) {
-        Invoice existingInvoice = invoiceRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No se encuentra la factura"));
         Invoice invoice = invoiceMapper.toPersistence(invoiceDTO);
-        invoice.setId(existingInvoice.getId());
+        invoice.setId(id);
         invoice = invoiceRepository.save(invoice);
         return invoiceMapper.toDTO(invoice);
     }
 
     public void deleteInvoice(String id) {
         invoiceRepository.deleteById(id);
-    }
-
-    public InvoiceDTO getInvoiceById(String id) {
-        return invoiceRepository.findById(id)
-                .map(invoiceMapper::toDTO)
-                .orElse(null);
-    }
-
-    public List<InvoiceDTO> getAllInvoices() {
-        return invoiceRepository.findAll().stream()
-                .map(invoiceMapper::toDTO)
-                .collect(Collectors.toList());
-    }
-
-    public List<InvoiceDTO> getInvoicesByCompanyName(String companyName) {
-        return invoiceRepository.findByCompanyNameContaining(companyName).stream()
-                .map(invoiceMapper::toDTO)
-                .collect(Collectors.toList());
-    }
-
-    public List<InvoiceDTO> getInvoicesByRuc(String ruc) {
-        return invoiceRepository.findByRuc(ruc).stream()
-                .map(invoiceMapper::toDTO)
-                .collect(Collectors.toList());
     }
 }

@@ -1,6 +1,7 @@
 package com.banquito.core.invoicedoc.service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -21,8 +22,9 @@ public class TaxService {
         this.taxMapper = taxMapper;
     }
 
-    public TaxDTO createTax(TaxDTO taxDTO) {
+   public TaxDTO createTax(TaxDTO taxDTO) {
         Tax tax = taxMapper.toPersistence(taxDTO);
+        tax.setUniqueId(UUID.randomUUID().toString());
         tax = taxRepository.save(tax);
         return taxMapper.toDTO(tax);
     }
