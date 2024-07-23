@@ -1,4 +1,4 @@
-package com.banquito.corecobros.invoice.dto;
+package com.banquito.core.invoicedoc.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
