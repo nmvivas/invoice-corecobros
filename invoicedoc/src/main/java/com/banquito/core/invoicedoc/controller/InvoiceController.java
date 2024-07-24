@@ -1,59 +1,49 @@
 package com.banquito.core.invoicedoc.controller;
 
-import java.util.List;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.banquito.core.invoicedoc.dto.InvoiceDTO;
 import com.banquito.core.invoicedoc.service.InvoiceService;
-
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/invoice")
+@Validated
 public class InvoiceController {
 
-    private final InvoiceService invoiceService;
-    
-    public InvoiceController(InvoiceService invoiceService) {
-        this.invoiceService = invoiceService;
-    }
+    private InvoiceService invoiceService;
 
     @PostMapping
-    public ResponseEntity<InvoiceDTO> createInvoice(@RequestBody InvoiceDTO invoiceDTO) {
+    public ResponseEntity<InvoiceDTO> createInvoice(@Valid @RequestBody InvoiceDTO invoiceDTO) {
         InvoiceDTO createdInvoice = invoiceService.createInvoice(invoiceDTO);
-        return ResponseEntity.ok(createdInvoice);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<InvoiceDTO> updateInvoice(@PathVariable String id, @RequestBody InvoiceDTO invoiceDTO) {
-        InvoiceDTO updatedInvoice = invoiceService.updateInvoice(id, invoiceDTO);
-        return ResponseEntity.ok(updatedInvoice);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteInvoice(@PathVariable String id) {
-        invoiceService.deleteInvoice(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<InvoiceDTO> getInvoiceById(@PathVariable String id) {
-        InvoiceDTO invoiceDTO = invoiceService.getInvoiceById(id);
-        return ResponseEntity.ok(invoiceDTO);
+        return new ResponseEntity<>(createdInvoice, HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<List<InvoiceDTO>> getAllInvoices() {
         List<InvoiceDTO> invoices = invoiceService.getAllInvoices();
-        return ResponseEntity.ok(invoices);
+        return new ResponseEntity<>(invoices, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<InvoiceDTO> getInvoiceById(@PathVariable String id) {
+        InvoiceDTO invoice = invoiceService.getInvoiceById(id);
+        return new ResponseEntity<>(invoice, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<InvoiceDTO> updateInvoice(@PathVariable String id, @Valid @RequestBody InvoiceDTO invoiceDTO) {
+        InvoiceDTO updatedInvoice = invoiceService.updateInvoice(id, invoiceDTO);
+        return new ResponseEntity<>(updatedInvoice, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteInvoice(@PathVariable String id) {
+        invoiceService.deleteInvoice(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

@@ -18,20 +18,20 @@ public class TaxDTO {
 
     private String id;
 
-    @NotBlank(message = "Tax Code is mandatory")
-    @Size(max = 10, message = "Tax Code cannot be longer than 10 characters")
+    @NotBlank(message = "El código del impuesto es obligatorio.")
+    @Size(max = 10, message = "El codigo del impuesto no puede tener más de 10 caracteres.")
     private String taxCode;
 
-    @NotBlank(message = "Tax Name is mandatory")
-    @Size(max = 50, message = "Tax Name cannot be longer than 50 characters")
+    @NotBlank(message = "El nombre del impuesto es obligatorio")
+    @Size(max = 50, message = "El nombre del impuesto no puede tener más de 50 caracteres")
     private String taxName;
 
-    @NotNull(message = "Rate is mandatory")
+    @NotNull(message = "La tarifa es obligatoria")
     private BigDecimal rate;
 
-    @NotNull(message = "Effective Date is mandatory")
+    @NotNull(message = "La fecha de vigencia es obligatoria")
     private LocalDateTime effectiveDate;
 
-    @NotNull(message = "Expiration Date is mandatory")
+    @NotNull(message = "La fecha de vencimiento es obligatoria")
     private LocalDateTime expirationDate;
 }

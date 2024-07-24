@@ -19,41 +19,41 @@ public class InvoiceDTO {
 
     private String id;
 
-    @NotBlank(message = "RUC is mandatory")
+    @NotBlank(message = "RUC es obligatorio")
     @Size
     private String ruc;
 
-    @NotBlank(message = "Company Name is mandatory")
-    @Size(max = 100, message = "Company Name cannot be longer than 100 characters")
+    @NotBlank(message = "El nombre de la empresa es obligatorio")
+    @Size(max = 100, message = "El nombre de la empresa no puede tener más de 100 caracteres.")
     private String companyName;
 
-    @NotBlank(message = "Address is mandatory")
-    @Size(max = 100, message = "Address cannot be longer than 100 characters")
+    @NotBlank(message = "La dirección es obligatoria.")
+    @Size(max = 100, message = "La dirección no puede tener más de 100 caracteres.")
     private String address;
 
-    @NotBlank(message = "Phone is mandatory")
-    @Size(max = 10, message = "Phone cannot be longer than 10 characters")
+    @NotBlank(message = "El teléfono es obligatorio")
+    @Size(max = 10, message = "El teléfono no puede tener más de 10 caracteres")
     private String phone;
 
-    @NotBlank(message = "Email is mandatory")
-    @Email(message = "Email should be valid")
-    @Size(max = 100, message = "Email cannot be longer than 100 characters")
+    @NotBlank(message = "El correo electrónico es obligatorio.")
+    @Email(message = "El correo electrónico debe ser válido.")
+    @Size(max = 100, message = "El correo electrónico no puede tener más de 100 caracteres.")
     private String email;
 
-    @NotBlank(message = "Sequential is mandatory")
-    @Size(max = 20, message = "Sequential cannot be longer than 20 characters")
+    @NotBlank(message = "Secuencial es obligatoria")
+    @Size(max = 20, message = "El secuencial no puede tener más de 20 caracteres.")
     private String sequential;
 
-    @NotBlank(message = "Authorization Number is mandatory")
-    @Size(max = 40, message = "Authorization Number cannot be longer than 40 characters")
+    @NotBlank(message = "El número de autorización es obligatorio")
+    @Size(max = 40, message = "El número de autorización no puede tener más de 40 caracteres")
     private String authorizationNumber;
 
-    @NotNull(message = "Date is mandatory")
+    @NotNull(message = "La fecha es obligatoria")
     private LocalDateTime date;
 
-    @NotNull(message = "Subtotal is mandatory")
+    @NotNull(message = "El subtotal es obligatorio")
     private BigDecimal subtotal;
 
-    @NotNull(message = "Total is mandatory")
+    @NotNull(message = "El total es obligatorio.")
     private BigDecimal total;
 }

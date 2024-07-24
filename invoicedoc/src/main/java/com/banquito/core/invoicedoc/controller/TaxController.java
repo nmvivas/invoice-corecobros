@@ -16,7 +16,7 @@ import com.banquito.core.invoicedoc.dto.TaxDTO;
 import com.banquito.core.invoicedoc.service.TaxService;
 
 @RestController
-@RequestMapping("/api/v1/taxes")
+@RequestMapping("/api/v1/taxe")
 public class TaxController {
 
     private TaxService taxService;
