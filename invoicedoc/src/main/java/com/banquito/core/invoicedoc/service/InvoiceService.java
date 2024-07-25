@@ -1,7 +1,6 @@
 package com.banquito.core.invoicedoc.service;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -11,6 +10,9 @@ import com.banquito.core.invoicedoc.model.Invoice;
 import com.banquito.core.invoicedoc.repository.InvoiceRepository;
 import com.banquito.core.invoicedoc.util.mapper.InvoiceMapper;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class InvoiceService {
     private InvoiceRepository invoiceRepository;
@@ -22,30 +24,40 @@ public class InvoiceService {
     }
 
     public InvoiceDTO createInvoice(InvoiceDTO invoiceDTO) {
-        Invoice invoice = invoiceMapper.toPersistence(invoiceDTO);
-        invoice.setUniqueId(UUID.randomUUID().toString());
-        invoice = invoiceRepository.save(invoice);
-        return invoiceMapper.toDTO(invoice);
+        log.info("Starting to create invoice");
+        var invoice = invoiceMapper.toPersistence(invoiceDTO);
+        var savedInvoice = invoiceRepository.save(invoice);
+        log.info("Invoice created successfully with id: {}", savedInvoice.getId());
+        return invoiceMapper.toDTO(savedInvoice);
     }
 
     public List<InvoiceDTO> getAllInvoices() {
-        List<Invoice> invoices = invoiceRepository.findAll();
-        return invoices.stream().map(invoiceMapper::toDTO).collect(Collectors.toList());
+        log.info("Fetching all invoices");
+        return invoiceRepository.findAll().stream()
+                .map(invoiceMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     public InvoiceDTO getInvoiceById(String id) {
-        Invoice invoice = invoiceRepository.findById(id).orElse(null);
+        log.info("Fetching invoice with id: {}", id);
+        Invoice invoice = invoiceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Invoice not found with id: " + id));
         return invoiceMapper.toDTO(invoice);
     }
 
     public InvoiceDTO updateInvoice(String id, InvoiceDTO invoiceDTO) {
-        Invoice invoice = invoiceMapper.toPersistence(invoiceDTO);
-        invoice.setId(id);
-        invoice = invoiceRepository.save(invoice);
-        return invoiceMapper.toDTO(invoice);
+        log.info("Updating invoice with id: {}", id);
+        var existingInvoice = invoiceRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Invoice not found with id: " + id));
+        var updatedInvoice = invoiceMapper.updateInvoiceFromDto(invoiceDTO, existingInvoice);
+        var savedInvoice = invoiceRepository.save(updatedInvoice);
+        log.info("Invoice updated successfully with id: {}", savedInvoice.getId());
+        return invoiceMapper.toDTO(savedInvoice);
     }
 
     public void deleteInvoice(String id) {
+        log.info("Deleting invoice with id: {}", id);
         invoiceRepository.deleteById(id);
+        log.info("Invoice deleted successfully with id: {}", id);
     }
 }

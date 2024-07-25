@@ -11,7 +11,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/detail-invoice")
+@RequestMapping("/api/v1/details-invoices")
 @Validated
 public class DetailInvoiceController {
 

@@ -2,6 +2,7 @@ package com.banquito.core.invoicedoc.util.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
@@ -16,4 +17,7 @@ public interface InvoiceMapper {
     InvoiceDTO toDTO(Invoice invoice);
 
     Invoice toPersistence(InvoiceDTO invoiceDTO);
+
+    Invoice updateInvoiceFromDto(InvoiceDTO invoiceDTO, @MappingTarget Invoice invoice);
+
 }

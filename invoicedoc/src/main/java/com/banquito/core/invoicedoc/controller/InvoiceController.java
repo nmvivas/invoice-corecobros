@@ -11,7 +11,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/invoice")
+@RequestMapping("/api/v1/invoices")
 @Validated
 public class InvoiceController {
 
@@ -19,6 +19,7 @@ public class InvoiceController {
 
     @PostMapping
     public ResponseEntity<InvoiceDTO> createInvoice(@Valid @RequestBody InvoiceDTO invoiceDTO) {
+        
         InvoiceDTO createdInvoice = invoiceService.createInvoice(invoiceDTO);
         return new ResponseEntity<>(createdInvoice, HttpStatus.CREATED);
     }
