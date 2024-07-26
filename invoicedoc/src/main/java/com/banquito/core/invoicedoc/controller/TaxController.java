@@ -51,9 +51,4 @@ public class TaxController {
         return ResponseEntity.ok(taxes);
     }
 
-    @GetMapping("/invoice/{invoiceId}")
-    public ResponseEntity<List<TaxDTO>> getTaxesByInvoiceId(@PathVariable String invoiceId) {
-        List<TaxDTO> taxes = taxService.getTaxesByInvoiceId(invoiceId);
-        return ResponseEntity.ok(taxes);
-    }
 }

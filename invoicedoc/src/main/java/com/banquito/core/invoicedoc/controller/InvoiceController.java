@@ -2,7 +2,6 @@ package com.banquito.core.invoicedoc.controller;
 
 import com.banquito.core.invoicedoc.dto.InvoiceDTO;
 import com.banquito.core.invoicedoc.service.InvoiceService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
