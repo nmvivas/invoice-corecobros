@@ -19,32 +19,32 @@ public class InvoiceController {
 
     @PostMapping
     public ResponseEntity<InvoiceDTO> createInvoice(@Valid @RequestBody InvoiceDTO invoiceDTO) {
-        
         InvoiceDTO createdInvoice = invoiceService.createInvoice(invoiceDTO);
-        return new ResponseEntity<>(createdInvoice, HttpStatus.CREATED);
+        return ResponseEntity.status(201).body(createdInvoice); // Status 201 for created resource
     }
 
     @GetMapping
     public ResponseEntity<List<InvoiceDTO>> getAllInvoices() {
         List<InvoiceDTO> invoices = invoiceService.getAllInvoices();
-        return new ResponseEntity<>(invoices, HttpStatus.OK);
+        return ResponseEntity.ok(invoices);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<InvoiceDTO> getInvoiceById(@PathVariable String id) {
         InvoiceDTO invoice = invoiceService.getInvoiceById(id);
-        return new ResponseEntity<>(invoice, HttpStatus.OK);
+        return ResponseEntity.ok(invoice);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<InvoiceDTO> updateInvoice(@PathVariable String id, @Valid @RequestBody InvoiceDTO invoiceDTO) {
+    public ResponseEntity<InvoiceDTO> updateInvoice(@PathVariable String id,
+            @Valid @RequestBody InvoiceDTO invoiceDTO) {
         InvoiceDTO updatedInvoice = invoiceService.updateInvoice(id, invoiceDTO);
-        return new ResponseEntity<>(updatedInvoice, HttpStatus.OK);
+        return ResponseEntity.ok(updatedInvoice);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteInvoice(@PathVariable String id) {
         invoiceService.deleteInvoice(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }

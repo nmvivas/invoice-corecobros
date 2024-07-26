@@ -25,10 +25,10 @@ public class InvoiceService {
 
     public InvoiceDTO createInvoice(InvoiceDTO invoiceDTO) {
         log.info("Starting to create invoice");
-        var invoice = invoiceMapper.toPersistence(invoiceDTO);
-        var savedInvoice = invoiceRepository.save(invoice);
-        log.info("Invoice created successfully with id: {}", savedInvoice.getId());
-        return invoiceMapper.toDTO(savedInvoice);
+        Invoice invoice = invoiceMapper.toPersistence(invoiceDTO);
+        invoice = invoiceRepository.save(invoice);
+        log.info("Invoice created successfully with id: {}", invoice.getId());
+        return invoiceMapper.toDTO(invoice);
     }
 
     public List<InvoiceDTO> getAllInvoices() {
@@ -47,12 +47,12 @@ public class InvoiceService {
 
     public InvoiceDTO updateInvoice(String id, InvoiceDTO invoiceDTO) {
         log.info("Updating invoice with id: {}", id);
-        var existingInvoice = invoiceRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Invoice not found with id: " + id));
-        var updatedInvoice = invoiceMapper.updateInvoiceFromDto(invoiceDTO, existingInvoice);
-        var savedInvoice = invoiceRepository.save(updatedInvoice);
-        log.info("Invoice updated successfully with id: {}", savedInvoice.getId());
-        return invoiceMapper.toDTO(savedInvoice);
+        Invoice existingInvoice = invoiceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No se encuentra la factura"));
+        Invoice invoice = invoiceMapper.toPersistence(invoiceDTO);
+        invoice.setId(existingInvoice.getId());
+        invoice = invoiceRepository.save(invoice);
+        return invoiceMapper.toDTO(invoice);
     }
 
     public void deleteInvoice(String id) {
