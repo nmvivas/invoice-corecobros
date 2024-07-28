@@ -34,6 +34,12 @@ public class InvoiceController {
         return ResponseEntity.ok(invoice);
     }
 
+    @GetMapping("/sequential/{sequential}")
+    public ResponseEntity<InvoiceDTO> getInvoiceBySequential(@PathVariable String sequential) {
+        InvoiceDTO invoice = invoiceService.getInvoiceBySequential(sequential);
+        return ResponseEntity.ok(invoice);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<InvoiceDTO> updateInvoice(@PathVariable String id,
             @Valid @RequestBody InvoiceDTO invoiceDTO) {
@@ -45,5 +51,21 @@ public class InvoiceController {
     public ResponseEntity<Void> deleteInvoice(@PathVariable String id) {
         invoiceService.deleteInvoice(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/date-range")
+    public ResponseEntity<List<InvoiceDTO>> getInvoicesByDateRange(
+            @RequestParam String startDate,
+            @RequestParam String endDate) {
+        List<InvoiceDTO> invoices = invoiceService.getInvoicesByDateRange(startDate, endDate);
+        return ResponseEntity.ok(invoices);
+    }
+
+    @GetMapping("/client")
+    public ResponseEntity<List<InvoiceDTO>> getInvoicesByClient(
+            @RequestParam String ruc,
+            @RequestParam(required = false) String companyName) {
+        List<InvoiceDTO> invoices = invoiceService.getInvoicesByClient(ruc, companyName);
+        return ResponseEntity.ok(invoices);
     }
 }

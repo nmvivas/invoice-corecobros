@@ -18,6 +18,6 @@ public interface InvoiceMapper {
 
     Invoice toPersistence(InvoiceDTO invoiceDTO);
 
-    Invoice updateInvoiceFromDto(InvoiceDTO invoiceDTO, @MappingTarget Invoice invoice);
+    void updateInvoiceFromDto(InvoiceDTO invoiceDTO, @MappingTarget Invoice invoice);
 
 }

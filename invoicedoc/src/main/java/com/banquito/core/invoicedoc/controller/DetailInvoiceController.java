@@ -49,4 +49,6 @@ public class DetailInvoiceController {
         detailInvoiceService.deleteDetailInvoice(id);
         return ResponseEntity.noContent().build();
     }
+
+    
 }

@@ -19,6 +19,7 @@ public class DetailInvoice {
     private String id;
     private String invoiceId;
     private String service;
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -26,6 +27,7 @@ public class DetailInvoice {
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         return result;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -43,5 +45,4 @@ public class DetailInvoice {
         return true;
     }
 
-    
 }
