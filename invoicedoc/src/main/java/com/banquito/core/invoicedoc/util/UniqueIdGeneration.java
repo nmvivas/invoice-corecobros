@@ -1,20 +1,18 @@
 package com.banquito.core.invoicedoc.util;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+
+
 import java.util.Random;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class UniqueIdGeneration {
-	private String uniqueId;
 
-	public UniqueIdGeneration() {
-		this.uniqueId = generateUniqueId();
-	}
-
-	private String generateUniqueId() {
+	public String generateUniqueId() {
 		String letters = generateRandomLetters(3);
 		String numbers = generateRandomNumbers(5);
 		String rawId = letters + "00" + numbers;
-		return encryptWithMD5(rawId);
+		return rawId;
 	}
 
 	private String generateRandomLetters(int length) {
@@ -37,22 +35,7 @@ public class UniqueIdGeneration {
 		return sb.toString();
 	}
 
-	private String encryptWithMD5(String input) {
-		try {
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			md.update(input.getBytes());
-			byte[] digest = md.digest();
-			StringBuilder sb = new StringBuilder();
-			for (byte b : digest) {
-				sb.append(String.format("%02x", b));
-			}
-			return sb.toString();
-		} catch (NoSuchAlgorithmException e) {
-			throw new RuntimeException("MD5 algorithm not found", e);
-		}
-	}
-
 	public String getUniqueId() {
-		return uniqueId;
+		return generateUniqueId();
 	}
 }

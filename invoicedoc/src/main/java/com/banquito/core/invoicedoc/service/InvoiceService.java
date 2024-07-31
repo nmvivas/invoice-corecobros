@@ -1,12 +1,13 @@
 package com.banquito.core.invoicedoc.service;
 
 import java.util.List;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.banquito.core.invoicedoc.dto.InvoiceDTO;
 import com.banquito.core.invoicedoc.model.Invoice;
@@ -19,19 +20,26 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class InvoiceService {
-    private InvoiceRepository invoiceRepository;
-    private InvoiceMapper invoiceMapper;
+    private final InvoiceRepository invoiceRepository;
+    private final UniqueIdGeneration uniqueIdGeneration;
+    private final InvoiceMapper invoiceMapper;
 
-    public InvoiceService(InvoiceRepository invoiceRepository, InvoiceMapper invoiceMapper) {
+    public InvoiceService(InvoiceRepository invoiceRepository, UniqueIdGeneration uniqueIdGeneration,
+            InvoiceMapper invoiceMapper) {
         this.invoiceRepository = invoiceRepository;
+        this.uniqueIdGeneration = uniqueIdGeneration;
         this.invoiceMapper = invoiceMapper;
     }
 
+    @Transactional
     public InvoiceDTO createInvoice(InvoiceDTO invoiceDTO) {
+        log.info("Creating invoice {}", invoiceDTO);
         Invoice invoice = invoiceMapper.toPersistence(invoiceDTO);
-        invoice.setUniqueId(new UniqueIdGeneration().getUniqueId());
-        Invoice savedInvoice = invoiceRepository.save(invoice);
-        return invoiceMapper.toDTO(savedInvoice);
+        invoice.setUniqueId(uniqueIdGeneration.generateUniqueId());
+        invoice.setDate(LocalDateTime.now());
+        invoice = invoiceRepository.save(invoice);
+        log.info("Invoice created successfully with id: {}", invoice.getId());
+        return invoiceMapper.toDTO(invoice);
     }
 
     public List<InvoiceDTO> getAllInvoices() {
@@ -71,15 +79,18 @@ public class InvoiceService {
         return invoiceMapper.toDTO(invoice);
     }
 
-    public List<InvoiceDTO> getInvoicesByDateRange(String startDate, String endDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
-        LocalDate start = LocalDate.parse(startDate, formatter);
-        LocalDate end = LocalDate.parse(endDate, formatter);
+    // public List<InvoiceDTO> getInvoicesByDateRange(String startDate, String
+    // endDate) {
+    // DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
+    // LocalDateTime start = LocalDateTime.parse(startDate, formatter);
+    // LocalDateTime end = LocalDateTime.parse(endDate, formatter);
 
-        List<Invoice> invoices = invoiceRepository.findByDateBetween(start.atStartOfDay(),
-                end.plusDays(1).atStartOfDay());
-        return invoices.stream().map(invoiceMapper::toDTO).collect(Collectors.toList());
-    }
+    // List<Invoice> invoices =
+    // invoiceRepository.findByDateBetween(start.atStartOfDay(),
+    // end.plusDays(1).atStartOfDay());
+    // return
+    // invoices.stream().map(invoiceMapper::toDTO).collect(Collectors.toList());
+    // }
 
     public List<InvoiceDTO> getInvoicesByClient(String ruc, String companyName) {
         List<Invoice> invoices;
