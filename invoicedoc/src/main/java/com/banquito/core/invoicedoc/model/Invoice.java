@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -18,6 +20,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Document(collection = "invoice")
+@CompoundIndexes({
+        @CompoundIndex(name = "comidx_invoice", def = "{'uniqueID': 1}", unique = true)
+})
 public class Invoice {
 
     @Id
