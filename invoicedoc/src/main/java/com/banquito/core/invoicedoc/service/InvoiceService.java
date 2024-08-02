@@ -87,7 +87,6 @@ public class InvoiceService {
         return this.mapper.toDTO(invoice);
     }
 
-
     public List<InvoiceDTO> getAllInvoices() {
         log.info("Fetching all invoices");
         return invoiceRepository.findAll().stream()
