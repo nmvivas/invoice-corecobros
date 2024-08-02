@@ -1,13 +1,10 @@
 package com.banquito.core.invoicedoc.service;
 
-import java.util.List;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.banquito.core.invoicedoc.dto.InvoiceDTO;
 import com.banquito.core.invoicedoc.model.Invoice;
@@ -31,15 +28,14 @@ public class InvoiceService {
         this.invoiceMapper = invoiceMapper;
     }
 
-    @Transactional
-    public InvoiceDTO createInvoice(InvoiceDTO invoiceDTO) {
-        log.info("Creating invoice {}", invoiceDTO);
-        Invoice invoice = invoiceMapper.toPersistence(invoiceDTO);
+    public InvoiceDTO createInvoice(InvoiceDTO dto) {
+        log.info("Creating invoice {}", dto);
+        Invoice invoice = this.invoiceMapper.toModel(dto);
         invoice.setUniqueId(uniqueIdGeneration.generateUniqueId());
         invoice.setDate(LocalDateTime.now());
-        invoice = invoiceRepository.save(invoice);
+        Invoice invoiceCreated = this.invoiceRepository.save(invoice);
         log.info("Invoice created successfully with id: {}", invoice.getId());
-        return invoiceMapper.toDTO(invoice);
+        return this.invoiceMapper.toDTO(invoiceCreated);
     }
 
     public List<InvoiceDTO> getAllInvoices() {
@@ -60,7 +56,7 @@ public class InvoiceService {
         log.info("Updating invoice with id: {}", id);
         Invoice existingInvoice = invoiceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("No se encuentra la factura"));
-        Invoice invoice = invoiceMapper.toPersistence(invoiceDTO);
+        Invoice invoice = invoiceMapper.toModel(invoiceDTO);
         invoice.setId(existingInvoice.getId());
         invoice = invoiceRepository.save(invoice);
         return invoiceMapper.toDTO(invoice);

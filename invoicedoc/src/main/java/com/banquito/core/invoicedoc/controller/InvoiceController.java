@@ -32,12 +32,11 @@ public class InvoiceController {
     }
 
     @PostMapping
-    public ResponseEntity<InvoiceDTO> createInvoice(@RequestBody InvoiceDTO dto){
+    public ResponseEntity<InvoiceDTO> createInvoice(@RequestBody InvoiceDTO dto) {
         try {
-            InvoiceDTO dtoIv = this.invoiceService.createInvoice(dto);
-            return new ResponseEntity<>(dtoIv, HttpStatus.CREATED);
-        } catch (RuntimeException rte) {
-            rte.printStackTrace();
+            InvoiceDTO dtoInv = this.invoiceService.createInvoice(dto);
+            return new ResponseEntity<>(dtoInv, HttpStatus.CREATED);
+        } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -75,10 +74,11 @@ public class InvoiceController {
 
     // @GetMapping("/date-range")
     // public ResponseEntity<List<InvoiceDTO>> getInvoicesByDateRange(
-    //         @RequestParam String startDate,
-    //         @RequestParam String endDate) {
-    //     List<InvoiceDTO> invoices = invoiceService.getInvoicesByDateRange(startDate, endDate);
-    //     return ResponseEntity.ok(invoices);
+    // @RequestParam String startDate,
+    // @RequestParam String endDate) {
+    // List<InvoiceDTO> invoices = invoiceService.getInvoicesByDateRange(startDate,
+    // endDate);
+    // return ResponseEntity.ok(invoices);
     // }
 
     @GetMapping("/client")
