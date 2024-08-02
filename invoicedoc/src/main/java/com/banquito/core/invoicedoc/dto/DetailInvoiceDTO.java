@@ -11,7 +11,6 @@ import lombok.Value;
 @NoArgsConstructor(force = true)
 @AllArgsConstructor
 public class DetailInvoiceDTO {
-    private String id;
     @NotNull
     private String invoiceId;
     @NotNull

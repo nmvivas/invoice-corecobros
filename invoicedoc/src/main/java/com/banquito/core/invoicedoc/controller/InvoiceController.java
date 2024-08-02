@@ -47,11 +47,6 @@ public class InvoiceController {
         return ResponseEntity.ok(invoices);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<InvoiceDTO> getInvoiceById(@PathVariable String id) {
-        InvoiceDTO invoice = invoiceService.getInvoiceById(id);
-        return ResponseEntity.ok(invoice);
-    }
 
     @GetMapping("/sequential/{sequential}")
     public ResponseEntity<InvoiceDTO> getInvoiceBySequential(@PathVariable String sequential) {

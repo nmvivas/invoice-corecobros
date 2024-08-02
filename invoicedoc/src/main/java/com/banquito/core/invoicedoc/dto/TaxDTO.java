@@ -14,7 +14,6 @@ import lombok.Value;
 @AllArgsConstructor
 public class TaxDTO {
 
-    private String id;
     @NotNull
     private String invoiceId;
     @NotNull

@@ -21,4 +21,6 @@ public interface InvoiceRepository extends MongoRepository<Invoice, String> {
     List<Invoice> findByDateBetween(LocalDateTime startDate, LocalDateTime endDate);
 
     List<Invoice> findByRucAndCompanyNameContainingIgnoreCase(String ruc, String companyName);
+
+    Optional<Invoice> findByUniqueId(String uniqueId);
 }

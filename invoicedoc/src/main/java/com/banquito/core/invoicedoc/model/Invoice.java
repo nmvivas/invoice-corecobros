@@ -7,7 +7,6 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Getter;
@@ -19,16 +18,17 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString
-@Document(collection = "invoice")
+@Document(collection = "invoices")
 @CompoundIndexes({
-        @CompoundIndex(name = "comidx_invoice", def = "{'uniqueID': 1}", unique = true)
+        @CompoundIndex(name = "invidx_invoice", def = "{'uniqueID': 1}", unique = true)
 })
 public class Invoice {
 
     @Id
     private String id;
-    @Indexed(unique = true)
+
     private String uniqueId;
+
     private String ruc;
     private String companyName;
     private String address;
