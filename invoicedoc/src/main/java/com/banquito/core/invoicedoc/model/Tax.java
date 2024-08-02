@@ -3,6 +3,7 @@ package com.banquito.core.invoicedoc.model;
 import java.math.BigDecimal;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Getter;
@@ -20,6 +21,7 @@ public class Tax {
     @Id
     private String id;
     private String invoiceId;
+    @Indexed(unique = true)
     private String uniqueId;
     private String name;
     private BigDecimal value;

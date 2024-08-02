@@ -26,7 +26,7 @@ public class DetailInvoiceService {
 
     public DetailInvoiceDTO createDetailInvoice(DetailInvoiceDTO detailInvoiceDTO) {
         log.info("Creating detail invoice: {}", detailInvoiceDTO);
-        DetailInvoice detailInvoice = detailInvoiceMapper.toModel(detailInvoiceDTO);
+        DetailInvoice detailInvoice = detailInvoiceMapper.toPersistence(detailInvoiceDTO);
         detailInvoice = detailInvoiceRepository.save(detailInvoice);
         log.info("Detail invoice created successfully with id: {}", detailInvoice.getId());
         return detailInvoiceMapper.toDTO(detailInvoice);
@@ -36,7 +36,7 @@ public class DetailInvoiceService {
         log.info("Updating detail invoice with id: {}", id);
         DetailInvoice existingDetailInvoice = detailInvoiceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("No se encuentra el detalle de factura"));
-        DetailInvoice detailInvoice = detailInvoiceMapper.toModel(detailInvoiceDTO);
+        DetailInvoice detailInvoice = detailInvoiceMapper.toPersistence(detailInvoiceDTO);
         detailInvoice.setId(existingDetailInvoice.getId());
         detailInvoice = detailInvoiceRepository.save(detailInvoice);
         log.info("Detail invoice updated successfully with id: {}", detailInvoice.getId());

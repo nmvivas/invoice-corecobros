@@ -34,7 +34,7 @@ public class InvoiceController {
     @PostMapping
     public ResponseEntity<InvoiceDTO> createInvoice(@RequestBody InvoiceDTO dto) {
         try {
-            InvoiceDTO dtoInv = this.invoiceService.createInvoice(dto);
+            InvoiceDTO dtoInv = this.invoiceService.create(dto);
             return new ResponseEntity<>(dtoInv, HttpStatus.CREATED);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();

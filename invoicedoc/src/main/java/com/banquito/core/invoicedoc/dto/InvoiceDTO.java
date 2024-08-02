@@ -5,16 +5,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@Setter
-@Getter
-@NoArgsConstructor
+@Value
+@Builder
+@NoArgsConstructor(force = true)
 @AllArgsConstructor
 public class InvoiceDTO {
-    private String id;
     private String uniqueId;
     private String ruc;
     private String companyName;
@@ -27,5 +26,5 @@ public class InvoiceDTO {
     private BigDecimal subtotal;
     private BigDecimal total;
     private List<DetailInvoiceDTO> detailInvoices;
-
+    private List<TaxDTO> taxes;
 }

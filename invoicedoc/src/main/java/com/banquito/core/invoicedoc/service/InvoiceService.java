@@ -7,10 +7,16 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.banquito.core.invoicedoc.dto.InvoiceDTO;
+import com.banquito.core.invoicedoc.model.DetailInvoice;
 import com.banquito.core.invoicedoc.model.Invoice;
+import com.banquito.core.invoicedoc.model.Tax;
+import com.banquito.core.invoicedoc.repository.DetailInvoiceRepository;
 import com.banquito.core.invoicedoc.repository.InvoiceRepository;
+import com.banquito.core.invoicedoc.repository.TaxRepository;
 import com.banquito.core.invoicedoc.util.UniqueIdGeneration;
+import com.banquito.core.invoicedoc.util.mapper.DetailInvoiceMapper;
 import com.banquito.core.invoicedoc.util.mapper.InvoiceMapper;
+import com.banquito.core.invoicedoc.util.mapper.TaxMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,30 +24,74 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class InvoiceService {
     private final InvoiceRepository invoiceRepository;
+    private DetailInvoiceRepository detailInvoiceRepository;
+    private TaxRepository taxRepository;
     private final UniqueIdGeneration uniqueIdGeneration;
-    private final InvoiceMapper invoiceMapper;
+    private final InvoiceMapper mapper;
+    private DetailInvoiceMapper detailInvoiceMapper;
+    private TaxMapper taxMapper;
 
-    public InvoiceService(InvoiceRepository invoiceRepository, UniqueIdGeneration uniqueIdGeneration,
-            InvoiceMapper invoiceMapper) {
+    public InvoiceService(InvoiceRepository invoiceRepository, DetailInvoiceRepository detailInvoiceRepository,
+            TaxRepository taxRepository, UniqueIdGeneration uniqueIdGeneration, InvoiceMapper mapper,
+            DetailInvoiceMapper detailInvoiceMapper, TaxMapper taxMapper) {
         this.invoiceRepository = invoiceRepository;
+        this.detailInvoiceRepository = detailInvoiceRepository;
+        this.taxRepository = taxRepository;
         this.uniqueIdGeneration = uniqueIdGeneration;
-        this.invoiceMapper = invoiceMapper;
+        this.mapper = mapper;
+        this.detailInvoiceMapper = detailInvoiceMapper;
+        this.taxMapper = taxMapper;
     }
 
-    public InvoiceDTO createInvoice(InvoiceDTO dto) {
-        log.info("Creating invoice {}", dto);
-        Invoice invoice = this.invoiceMapper.toModel(dto);
-        invoice.setUniqueId(uniqueIdGeneration.generateUniqueId());
+    public InvoiceDTO create(InvoiceDTO dto) {
+        log.info("Va a crear factura {}", dto);
+    
+        Invoice invoice = this.mapper.toPersistence(dto);
+        String uniqueId = uniqueIdGeneration.generateUniqueId();
+        invoice.setUniqueId(uniqueId);
         invoice.setDate(LocalDateTime.now());
-        Invoice invoiceCreated = this.invoiceRepository.save(invoice);
-        log.info("Invoice created successfully with id: {}", invoice.getId());
-        return this.invoiceMapper.toDTO(invoiceCreated);
+    
+        if (dto.getDetailInvoices() != null) {
+            List<DetailInvoice> detailInvoices = dto.getDetailInvoices().stream()
+                    .map(detailInvoiceDTO -> {
+                        DetailInvoice detailInvoice = detailInvoiceMapper.toPersistence(detailInvoiceDTO);
+                        detailInvoice.setInvoiceId(uniqueId);
+                        return detailInvoice;
+                    })
+                    .collect(Collectors.toList());
+            invoice.setDetailInvoices(detailInvoices);
+        }
+    
+        if (dto.getTaxes() != null) {
+            List<Tax> taxes = dto.getTaxes().stream()
+                    .map(taxDTO -> {
+                        Tax tax = taxMapper.toPersistence(taxDTO);
+                        tax.setInvoiceId(uniqueId);
+                        return tax;
+                    })
+                    .collect(Collectors.toList());
+            invoice.setTaxes(taxes);
+        }
+    
+        invoice = this.invoiceRepository.save(invoice);
+        log.info("Se creó la factura: {}", invoice);
+    
+        if (invoice.getDetailInvoices() != null) {
+            detailInvoiceRepository.saveAll(invoice.getDetailInvoices());
+        }
+    
+        if (invoice.getTaxes() != null) {
+            taxRepository.saveAll(invoice.getTaxes());
+        }
+    
+        return this.mapper.toDTO(invoice);
     }
+
 
     public List<InvoiceDTO> getAllInvoices() {
         log.info("Fetching all invoices");
         return invoiceRepository.findAll().stream()
-                .map(invoiceMapper::toDTO)
+                .map(mapper::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -49,17 +99,17 @@ public class InvoiceService {
         log.info("Fetching invoice with id: {}", id);
         Invoice invoice = invoiceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Invoice not found with id: " + id));
-        return invoiceMapper.toDTO(invoice);
+        return mapper.toDTO(invoice);
     }
 
     public InvoiceDTO updateInvoice(String id, InvoiceDTO invoiceDTO) {
         log.info("Updating invoice with id: {}", id);
         Invoice existingInvoice = invoiceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("No se encuentra la factura"));
-        Invoice invoice = invoiceMapper.toModel(invoiceDTO);
+        Invoice invoice = mapper.toPersistence(invoiceDTO);
         invoice.setId(existingInvoice.getId());
         invoice = invoiceRepository.save(invoice);
-        return invoiceMapper.toDTO(invoice);
+        return mapper.toDTO(invoice);
     }
 
     public void deleteInvoice(String id) {
@@ -72,7 +122,7 @@ public class InvoiceService {
         log.info("Fetching invoice with sequential: {}", sequential);
         Invoice invoice = invoiceRepository.findBySequential(sequential)
                 .orElseThrow(() -> new RuntimeException("Invoice not found with sequential: " + sequential));
-        return invoiceMapper.toDTO(invoice);
+        return mapper.toDTO(invoice);
     }
 
     // public List<InvoiceDTO> getInvoicesByDateRange(String startDate, String
@@ -95,6 +145,6 @@ public class InvoiceService {
         } else {
             invoices = invoiceRepository.findByRuc(ruc);
         }
-        return invoices.stream().map(invoiceMapper::toDTO).collect(Collectors.toList());
+        return invoices.stream().map(mapper::toDTO).collect(Collectors.toList());
     }
 }

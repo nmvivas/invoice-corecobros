@@ -7,10 +7,13 @@ import org.mapstruct.ReportingPolicy;
 import com.banquito.core.invoicedoc.dto.TaxDTO;
 import com.banquito.core.invoicedoc.model.Tax;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(
+        componentModel = MappingConstants.ComponentModel.SPRING,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE
+)
 public interface TaxMapper {
 
-    TaxDTO toDTO(Tax tax);
+    Tax toPersistence(TaxDTO dto);
 
-    Tax toModel(TaxDTO taxDTO);
+    TaxDTO toDTO(Tax tax);
 }

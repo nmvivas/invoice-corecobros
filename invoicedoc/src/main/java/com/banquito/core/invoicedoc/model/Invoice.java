@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Getter;
@@ -21,6 +22,7 @@ public class Invoice {
 
     @Id
     private String id;
+    @Indexed(unique = true)
     private String uniqueId;
     private String ruc;
     private String companyName;
@@ -33,6 +35,7 @@ public class Invoice {
     private BigDecimal subtotal;
     private BigDecimal total;
     private List<DetailInvoice> detailInvoices;
+    private List<Tax> taxes;
 
     @Override
     public int hashCode() {

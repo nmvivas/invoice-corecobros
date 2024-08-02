@@ -28,7 +28,7 @@ public class TaxService {
 
     public TaxDTO createTax(TaxDTO taxDTO) {
         log.info("Creating tax: {}", taxDTO);
-        Tax tax = taxMapper.toModel(taxDTO);
+        Tax tax = taxMapper.toPersistence(taxDTO);
         tax.setUniqueId(UUID.randomUUID().toString());
         tax = taxRepository.save(tax);
         log.info("Tax created: {}", tax);
@@ -37,7 +37,7 @@ public class TaxService {
 
     public TaxDTO updateTax(String id, TaxDTO taxDTO) {
         Tax existingTax = taxRepository.findById(id).orElseThrow(() -> new RuntimeException("Tax not found"));
-        Tax tax = taxMapper.toModel(taxDTO);
+        Tax tax = taxMapper.toPersistence(taxDTO);
         tax.setId(existingTax.getId());
         tax = taxRepository.save(tax);
         return taxMapper.toDTO(tax);
