@@ -5,10 +5,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.CompoundIndex;
-import org.springframework.data.mongodb.core.index.CompoundIndexes;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,25 +21,35 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Document(collection = "invoices")
-@CompoundIndexes({
-        @CompoundIndex(name = "invidx_invoice", def = "{'uniqueID': 1}", unique = true)
-})
 public class Invoice {
 
     @Id
     private String id;
 
+    @NotNull
     private String uniqueId;
 
+    @NotNull
     private String ruc;
+    @NotNull
     private String companyName;
+    @NotNull
     private String address;
+    @NotNull
     private String phone;
+    @Indexed(unique = true)
+    @Email
+    @NotNull
     private String email;
+    @NotNull
     private String sequential;
+    @NotNull
     private String authorizationNumber;
+    @NotNull
     private LocalDateTime date;
+    @NotBlank
     private BigDecimal subtotal;
+    @NotBlank
     private BigDecimal total;
     private List<DetailInvoice> detailInvoices;
     private List<Tax> taxes;

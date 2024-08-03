@@ -14,6 +14,7 @@ import lombok.Value;
 @NoArgsConstructor(force = true)
 @AllArgsConstructor
 public class InvoiceDTO {
+    private String id;
     private String uniqueId;
     private String ruc;
     private String companyName;

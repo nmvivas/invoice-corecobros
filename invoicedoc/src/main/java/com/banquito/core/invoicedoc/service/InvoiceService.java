@@ -2,12 +2,16 @@ package com.banquito.core.invoicedoc.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.banquito.core.invoicedoc.dto.InvoiceDTO;
+import com.banquito.core.invoicedoc.model.DetailInvoice;
 import com.banquito.core.invoicedoc.model.Invoice;
+import com.banquito.core.invoicedoc.model.Tax;
 import com.banquito.core.invoicedoc.repository.InvoiceRepository;
 import com.banquito.core.invoicedoc.util.UniqueIdGeneration;
 import com.banquito.core.invoicedoc.util.mapper.InvoiceMapper;
@@ -21,8 +25,6 @@ public class InvoiceService {
     private final UniqueIdGeneration uniqueIdGeneration;
     private final InvoiceMapper mapper;
 
-    
-   
     public InvoiceService(InvoiceRepository invoiceRepository, UniqueIdGeneration uniqueIdGeneration,
             InvoiceMapper mapper) {
         this.invoiceRepository = invoiceRepository;
@@ -30,27 +32,31 @@ public class InvoiceService {
         this.mapper = mapper;
     }
 
-    
-    public InvoiceDTO create(InvoiceDTO dto) {
-        log.info("Va a crear factura {}", dto);
-    
-        Invoice invoice = this.mapper.toPersistence(dto);
-        String uniqueId = uniqueIdGeneration.generateUniqueId();
-        invoice.setUniqueId(uniqueId);
+    @Transactional
+    public InvoiceDTO create(InvoiceDTO invoiceDTO) {
+        log.info("Creando nueva factura.");
+        Invoice invoice = mapper.toPersistence(invoiceDTO);
+        invoice.setUniqueId(uniqueIdGeneration.generateUniqueId());
         invoice.setDate(LocalDateTime.now());
-    
-        if (dto.getDetailInvoices() != null) {
-           
+
+        if (invoice.getDetailInvoices() != null) {
+            for (DetailInvoice detail : invoice.getDetailInvoices()) {
+                if (detail.getId() == null) {
+                    detail.setId(UUID.randomUUID().toString());
+                }
+            }
         }
-    
-        if (dto.getTaxes() != null) {
-           
+
+        if (invoice.getTaxes() != null) {
+            for (Tax taxes : invoice.getTaxes()) {
+                if (taxes.getId() == null) {
+                    taxes.setId(UUID.randomUUID().toString());
+                }
+            }
         }
-    
-        invoice = this.invoiceRepository.save(invoice);
-        log.info("Se creó la factura: {}", invoice);
-    
-        return this.mapper.toDTO(invoice);
+
+        invoice = invoiceRepository.save(invoice);
+        return mapper.toDTO(invoice);
     }
 
     public List<InvoiceDTO> getAllInvoices() {
@@ -59,7 +65,6 @@ public class InvoiceService {
                 .map(mapper::toDTO)
                 .collect(Collectors.toList());
     }
-
 
     public InvoiceDTO updateInvoice(String id, InvoiceDTO invoiceDTO) {
         log.info("Updating invoice with id: {}", id);

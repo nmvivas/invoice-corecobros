@@ -1,5 +1,8 @@
 package com.banquito.core.invoicedoc.model;
 
+import org.springframework.data.annotation.Id;
+
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -7,8 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DetailInvoice {
 
-    private String invoiceId;
+    @Id
+    private String id;
 
+    @NotNull
+    private String invoiceId;
+    @NotNull
     private String service;
 
 }

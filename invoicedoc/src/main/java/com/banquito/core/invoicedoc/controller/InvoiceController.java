@@ -2,7 +2,6 @@ package com.banquito.core.invoicedoc.controller;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,10 +18,12 @@ import com.banquito.core.invoicedoc.dto.InvoiceDTO;
 import com.banquito.core.invoicedoc.service.InvoiceService;
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/v1/invoices")
 @Validated
+@Slf4j
 public class InvoiceController {
 
     private InvoiceService invoiceService;
@@ -32,13 +33,10 @@ public class InvoiceController {
     }
 
     @PostMapping
-    public ResponseEntity<InvoiceDTO> createInvoice(@RequestBody InvoiceDTO dto) {
-        try {
-            InvoiceDTO dtoInv = this.invoiceService.create(dto);
-            return new ResponseEntity<>(dtoInv, HttpStatus.CREATED);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
-        }
+    public InvoiceDTO createInvoice(@RequestBody InvoiceDTO invoiceDTO) {
+        log.info("Creando nueva factura.");
+        return invoiceService.create(invoiceDTO);
+        
     }
 
     @GetMapping
@@ -46,7 +44,6 @@ public class InvoiceController {
         List<InvoiceDTO> invoices = invoiceService.getAllInvoices();
         return ResponseEntity.ok(invoices);
     }
-
 
     @GetMapping("/sequential/{sequential}")
     public ResponseEntity<InvoiceDTO> getInvoiceBySequential(@PathVariable String sequential) {
