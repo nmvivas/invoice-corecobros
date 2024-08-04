@@ -25,10 +25,8 @@ public class Invoice {
 
     @Id
     private String id;
-
-    @NotNull
+    @Indexed(unique = true)
     private String uniqueId;
-
     @NotNull
     private String ruc;
     @NotNull
@@ -52,7 +50,6 @@ public class Invoice {
     @NotBlank
     private BigDecimal total;
     private List<DetailInvoice> detailInvoices;
-    private List<Tax> taxes;
 
     @Override
     public int hashCode() {

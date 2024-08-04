@@ -6,10 +6,12 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Value;
+import lombok.Setter;
 
-@Value
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor(force = true)
 @AllArgsConstructor
@@ -27,5 +29,5 @@ public class InvoiceDTO {
     private BigDecimal subtotal;
     private BigDecimal total;
     private List<DetailInvoiceDTO> detailInvoices;
-    private List<TaxDTO> taxes;
+    
 }

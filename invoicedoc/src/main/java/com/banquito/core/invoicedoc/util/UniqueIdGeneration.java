@@ -1,8 +1,6 @@
 package com.banquito.core.invoicedoc.util;
 
-
 import java.util.Random;
-
 import org.springframework.stereotype.Component;
 
 @Component
