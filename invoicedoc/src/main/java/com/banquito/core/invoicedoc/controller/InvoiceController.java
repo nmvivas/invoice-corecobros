@@ -68,7 +68,7 @@ public class InvoiceController {
         return ResponseEntity.ok(updatedInvoice);
     }
 
-    @GetMapping("/uniqueId")
+    @GetMapping("/uniqueId/{uniqueId}")
     @Operation(summary = "Get invoice by uniqueID", description = "Retrive invoice by uniqueID")
     public ResponseEntity<InvoiceDTO> getInvoiceByUniqueId(@RequestParam String uniqueId) {
         InvoiceDTO invoice = invoiceService.getInvoiceByUniqueId(uniqueId);
