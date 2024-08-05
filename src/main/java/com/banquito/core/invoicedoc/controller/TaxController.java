@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,12 +64,5 @@ public class TaxController {
             @Valid @RequestBody TaxDTO taxDTO) {
         TaxDTO updatedTax = taxService.updateTax(uniqueId, taxDTO);
         return ResponseEntity.ok(updatedTax);
-    }
-
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Delete a tax", description = "Delete an existing tax")
-    public ResponseEntity<Void> deleteTax(@PathVariable String id) {
-        taxService.deleteTax(id);
-        return ResponseEntity.noContent().build();
     }
 }

@@ -11,6 +11,7 @@ import com.banquito.core.invoicedoc.model.Tax;
 @Repository
 public interface TaxRepository extends MongoRepository<Tax, String> {
 
+    @SuppressWarnings("null")
     List<Tax> findAll();
 
     Optional<Tax> findByUniqueId(String uniqueId);
