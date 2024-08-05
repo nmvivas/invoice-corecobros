@@ -25,7 +25,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/Invoice-Microservice/api/v1/invoices")
+@RequestMapping("/invoice-microservice/api/v1/invoices")
 @Validated
 @Slf4j
 @Tag(name = "Invoice", description = "Endpoints for managing invoices")

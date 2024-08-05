@@ -23,7 +23,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/Invoice-Microservice/api/v1/taxes")
+@RequestMapping("/invoice-microservice/api/v1/taxes")
 @Validated
 @Slf4j
 @Tag(name = "Tax", description = "Endpoints for managing taxes")
