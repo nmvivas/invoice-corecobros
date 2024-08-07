@@ -53,33 +53,14 @@ public class InvoiceController {
         return ResponseEntity.ok(invoices);
     }
 
-    @GetMapping("/sequential/{sequential}")
-    @Operation(summary = "Get invoice by sequential", description = "Retrive invoice by sequential")
-    public ResponseEntity<InvoiceDTO> getInvoiceBySequential(@PathVariable String sequential) {
-        InvoiceDTO invoice = invoiceService.getInvoiceBySequential(sequential);
-        return ResponseEntity.ok(invoice);
-    }
-
-    @PutMapping("/id/{id}")
-    @Operation(summary = "Update an invoice", description = "Update an existing invoice")
-    public ResponseEntity<InvoiceDTO> updateInvoice(@PathVariable String id,
-            @Valid @RequestBody InvoiceDTO invoiceDTO) {
-        InvoiceDTO updatedInvoice = invoiceService.updateInvoice(id, invoiceDTO);
-        return ResponseEntity.ok(updatedInvoice);
-    }
-
-    @GetMapping("/uniqueId/{uniqueId}")
-    @Operation(summary = "Get invoice by uniqueID", description = "Retrive invoice by uniqueID")
-    public ResponseEntity<InvoiceDTO> getInvoiceByUniqueId(@RequestParam String uniqueId) {
-        InvoiceDTO invoice = invoiceService.getInvoiceByUniqueId(uniqueId);
-        return ResponseEntity.ok(invoice);
-    }
-
-    @DeleteMapping("/id/{id}")
-    @Operation(summary = "Delete an invoice", description = "Delete an existing invoice")
-    public ResponseEntity<Void> deleteInvoice(@PathVariable String id) {
-        invoiceService.deleteInvoice(id);
-        return ResponseEntity.noContent().build();
+    
+    @GetMapping("/client/{client}")
+    @Operation(summary = "Get invoices by client", description = "Retrive invoices by client")
+    public ResponseEntity<List<InvoiceDTO>> getInvoicesByClient(
+            @RequestParam String ruc,
+            @RequestParam(required = false) String companyName) {
+        List<InvoiceDTO> invoices = invoiceService.getInvoicesByClient(ruc, companyName);
+        return ResponseEntity.ok(invoices);
     }
 
     @GetMapping("/dateRange/{dateRange}")
@@ -90,12 +71,32 @@ public class InvoiceController {
         return ResponseEntity.ok(invoices);
     }
 
-    @GetMapping("/client/{client}")
-    @Operation(summary = "Get invoices by client", description = "Retrive invoices by client")
-    public ResponseEntity<List<InvoiceDTO>> getInvoicesByClient(
-            @RequestParam String ruc,
-            @RequestParam(required = false) String companyName) {
-        List<InvoiceDTO> invoices = invoiceService.getInvoicesByClient(ruc, companyName);
-        return ResponseEntity.ok(invoices);
+    @PutMapping("/id/{id}")
+    @Operation(summary = "Update an invoice", description = "Update an existing invoice")
+    public ResponseEntity<InvoiceDTO> updateInvoice(@PathVariable String id,
+            @Valid @RequestBody InvoiceDTO invoiceDTO) {
+        InvoiceDTO updatedInvoice = invoiceService.updateInvoice(id, invoiceDTO);
+        return ResponseEntity.ok(updatedInvoice);
+    }
+
+    @DeleteMapping("/id/{id}")
+    @Operation(summary = "Delete an invoice", description = "Delete an existing invoice")
+    public ResponseEntity<Void> deleteInvoice(@PathVariable String id) {
+        invoiceService.deleteInvoice(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/sequential/{sequential}")
+    @Operation(summary = "Get invoice by sequential", description = "Retrive invoice by sequential")
+    public ResponseEntity<InvoiceDTO> getInvoiceBySequential(@PathVariable String sequential) {
+        InvoiceDTO invoice = invoiceService.getInvoiceBySequential(sequential);
+        return ResponseEntity.ok(invoice);
+    }
+
+    @GetMapping("/uniqueId/{uniqueId}")
+    @Operation(summary = "Get invoice by uniqueID", description = "Retrive invoice by uniqueID")
+    public ResponseEntity<InvoiceDTO> getInvoiceByUniqueId(@RequestParam String uniqueId) {
+        InvoiceDTO invoice = invoiceService.getInvoiceByUniqueId(uniqueId);
+        return ResponseEntity.ok(invoice);
     }
 }
