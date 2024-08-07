@@ -67,7 +67,7 @@ public class TaxController {
         return ResponseEntity.ok(updatedTax);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id/{id}")
     @Operation(summary = "Delete a tax", description = "Delete an existing tax")
     public ResponseEntity<Void> deleteTax(@PathVariable String id) {
         taxService.deleteTax(id);

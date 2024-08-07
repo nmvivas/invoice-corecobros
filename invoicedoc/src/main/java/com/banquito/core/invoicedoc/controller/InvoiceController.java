@@ -60,7 +60,7 @@ public class InvoiceController {
         return ResponseEntity.ok(invoice);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/id/{id}")
     @Operation(summary = "Update an invoice", description = "Update an existing invoice")
     public ResponseEntity<InvoiceDTO> updateInvoice(@PathVariable String id,
             @Valid @RequestBody InvoiceDTO invoiceDTO) {
@@ -75,7 +75,7 @@ public class InvoiceController {
         return ResponseEntity.ok(invoice);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id/{id}")
     @Operation(summary = "Delete an invoice", description = "Delete an existing invoice")
     public ResponseEntity<Void> deleteInvoice(@PathVariable String id) {
         invoiceService.deleteInvoice(id);
