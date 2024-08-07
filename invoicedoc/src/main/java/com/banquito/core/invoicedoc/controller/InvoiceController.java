@@ -68,7 +68,7 @@ public class InvoiceController {
         return ResponseEntity.ok(updatedInvoice);
     }
 
-    @GetMapping("/{uniqueId}")
+    @GetMapping("/uniqueId/{uniqueId}")
     @Operation(summary = "Get invoice by uniqueID", description = "Retrive invoice by uniqueID")
     public ResponseEntity<InvoiceDTO> getInvoiceByUniqueId(@RequestParam String uniqueId) {
         InvoiceDTO invoice = invoiceService.getInvoiceByUniqueId(uniqueId);
@@ -82,7 +82,7 @@ public class InvoiceController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{dateRange}")
+    @GetMapping("/dateRange/{dateRange}")
     @Operation(summary = "Get invoices by date range", description = "Retrive invoices by date range")
     public ResponseEntity<List<InvoiceDTO>> getInvoicesByDateRange(@RequestParam LocalDateTime startDate,
             @RequestParam LocalDateTime endDate) {
@@ -90,7 +90,7 @@ public class InvoiceController {
         return ResponseEntity.ok(invoices);
     }
 
-    @GetMapping("/{client}")
+    @GetMapping("/client/{client}")
     @Operation(summary = "Get invoices by client", description = "Retrive invoices by client")
     public ResponseEntity<List<InvoiceDTO>> getInvoicesByClient(
             @RequestParam String ruc,
